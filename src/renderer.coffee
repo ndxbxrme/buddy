@@ -8,6 +8,7 @@ dc = null
 window.sendMessage = ->
   message = document.querySelector 'input[type=text]'
   .value
+  messages = document.querySelector '.messages'
   messages.innerHTML += 'me: ' + message + '\n'
   dc?.send message
 desktopCapturer.getSources
@@ -34,7 +35,7 @@ desktopCapturer.getSources
       video.srcObject = pc.getRemoteStreams()[0]
       video.onloadedmetadata = (e) ->
         video.play()
-    .on 'channel:opened:events'
+    .on 'channel:opened:events', handleEvents
   , (err) ->
     video = document.querySelector 'video'
     desktopCapturer.getSources 
@@ -56,3 +57,4 @@ desktopCapturer.getSources
           video.srcObject = pc.getRemoteStreams()[0]
           video.onloadedmetadata = (e) ->
             video.play()
+        .on 'channel:opened:events', handleEvents

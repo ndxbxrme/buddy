@@ -16,8 +16,8 @@
   window.sendMessage = function() {
     var message;
     message = document.querySelector('input[type=text]').value;
-    console.log(message);
-    return dc.send(message);
+    messages.innerHTML += 'me: ' + message + '\n';
+    return dc != null ? dc.send(message) : void 0;
   };
 
   desktopCapturer.getSources({
@@ -30,7 +30,7 @@
       return dc.onMessage = function(event) {
         var messages;
         messages = document.querySelector('.messages');
-        return messages.innerHTML += event.data + '\n';
+        return messages.innerHTML += 'you: ' + event.data + '\n';
       };
     };
     return navigator.mediaDevices.getUserMedia({
