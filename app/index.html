@@ -2,6 +2,9 @@
 <html>
   <head>
     <style type="text/css">
+      body {
+        display: flex;
+      }
       video {
         filter: url(#myFilter);
         border: 3px solid black;
@@ -13,10 +16,11 @@
     </style>
   </head>
   <body>
-    <h1>buddy buddy buddy</h1>
     <div class="videos"></div>
-    <input type="text" onchange="sendMessage()"/>
-    <div class="messages"></div>
+    <div class="message-panel">
+      <input type="text" onchange="sendMessage()"/>
+      <div class="messages"></div>
+    </div>
     <svg>
       <filter id="myFilter">
         <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>

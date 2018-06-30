@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  var dc, desktopCapturer, opts, quickconnect;
+  var dcs, desktopCapturer, opts, quickconnect;
 
   ({desktopCapturer} = require('electron'));
 
@@ -11,14 +11,16 @@
     signaller: 'http://192.168.0.2:3000'
   };
 
-  dc = null;
+  dcs = [];
 
   window.sendMessage = function() {
     var message, messages;
     message = document.querySelector('input[type=text]').value;
     messages = document.querySelector('.messages');
     messages.innerHTML += 'me: ' + message + '\n';
-    return dc != null ? dc.send(message) : void 0;
+    return dcs.forEach(function(dc) {
+      return dc.send(message);
+    });
   };
 
   desktopCapturer.getSources({
@@ -28,8 +30,8 @@
     console.log(sources);
     handleEvents = function(id, _dc) {
       console.log('channel opened', id);
-      dc = _dc;
-      return dc.onmessage = function(event) {
+      dcs.push;
+      return _dc.onmessage = function(event) {
         var messages;
         messages = document.querySelector('.messages');
         return messages.innerHTML += 'you: ' + event.data + '\n';

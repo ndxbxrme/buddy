@@ -18,7 +18,7 @@ desktopCapturer.getSources
   console.log sources
   handleEvents = (id, _dc) ->
     console.log 'channel opened', id
-    dcs.push
+    dcs.push _dc
     _dc.onmessage = (event) ->
       messages = document.querySelector '.messages'
       messages.innerHTML += 'you: ' + event.data + '\n'
