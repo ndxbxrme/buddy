@@ -32,7 +32,17 @@
         plugins: []
       }).addStream(stream);
     }, function(err) {
-      return console.log('error', err);
+      var video;
+      video = document.querySelector('video');
+      return quickconnect(opts.signaller, {
+        room: opts.room,
+        plugins: []
+      }).on('call:started', function(id, pc, data) {
+        video.srcObject = pc.getRemoteStreams()[0];
+        return video.onloadedmetadata = function(e) {
+          return video.play();
+        };
+      });
     });
   });
 
