@@ -4,14 +4,14 @@ quickconnect = require 'rtc-quickconnect'
 opts =
   room: 'buddy'
   signaller: 'http://192.168.0.2:3000'
-dcs = []
+dcs = {}
 window.sendMessage = ->
   messageElm = document.querySelector 'input[type=text]'
   message = messageElm.value
   messageElm.value = ''
   messages = document.querySelector '.messages'
   messages.innerHTML += 'me: ' + message + '\n'
-  dcs.forEach (dc) ->
+  for id, dc of dcs
     dc.send message
 desktopCapturer.getSources
   types: ['screen', 'window']
@@ -19,7 +19,7 @@ desktopCapturer.getSources
   console.log sources
   handleEvents = (id, _dc) ->
     console.log 'channel opened', id
-    dcs.push _dc
+    dcs[id] = _dc
     _dc.onmessage = (event) ->
       messages = document.querySelector '.messages'
       messages.innerHTML += 'you: ' + event.data + '\n'
@@ -40,7 +40,12 @@ desktopCapturer.getSources
       video.srcObject = pc.getRemoteStreams()[0]
       video.onloadedmetadata = (e) ->
         video.play()
+    .on 'call:ended', (id) ->
+      document.querySelector 'video[data-peer=' + id + ']'
+      .remove()
     .on 'channel:opened:events', handleEvents
+    .on 'channel:closed:events', (id) ->
+      delete dcs[id]
   , (err) ->
     desktopCapturer.getSources 
       types: ['screen', 'window']
@@ -59,9 +64,15 @@ desktopCapturer.getSources
         .addStream stream
         .on 'call:started', (id, pc, data) ->
           video = document.createElement 'video'
+          video.dataset.peer = id
           document.querySelector '.videos'
           .appendChild video
           video.srcObject = pc.getRemoteStreams()[0]
           video.onloadedmetadata = (e) ->
             video.play()
+        .on 'call:ended', (id) ->
+          document.querySelector 'video[data-peer=' + id + ']'
+          .remove()
         .on 'channel:opened:events', handleEvents
+        .on 'channel:closed:events', (id) ->
+          delete dcs[id]

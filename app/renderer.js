@@ -14,8 +14,10 @@
   dcs = [];
 
   window.sendMessage = function() {
-    var message, messages;
-    message = document.querySelector('input[type=text]').value;
+    var message, messageElm, messages;
+    messageElm = document.querySelector('input[type=text]');
+    message = messageElm.value;
+    messageElm.value = '';
     messages = document.querySelector('.messages');
     messages.innerHTML += 'me: ' + message + '\n';
     return dcs.forEach(function(dc) {
