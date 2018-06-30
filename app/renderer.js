@@ -14,8 +14,9 @@
   dc = null;
 
   window.sendMessage = function() {
-    var message;
+    var message, messages;
     message = document.querySelector('input[type=text]').value;
+    messages = document.querySelector('.messages');
     messages.innerHTML += 'me: ' + message + '\n';
     return dc != null ? dc.send(message) : void 0;
   };
@@ -26,6 +27,7 @@
     var handleEvents;
     console.log(sources);
     handleEvents = function(id, _dc) {
+      console.log('channel opened', id);
       dc = _dc;
       return dc.onMessage = function(event) {
         var messages;
@@ -48,7 +50,7 @@
         return video.onloadedmetadata = function(e) {
           return video.play();
         };
-      }).on('channel:opened:events');
+      }).on('channel:opened:events', handleEvents);
     }, function(err) {
       var video;
       video = document.querySelector('video');
@@ -72,7 +74,7 @@
             return video.onloadedmetadata = function(e) {
               return video.play();
             };
-          });
+          }).on('channel:opened:events', handleEvents);
         });
       });
     });
