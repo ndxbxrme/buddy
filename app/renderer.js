@@ -13,6 +13,8 @@
 
   dcs = {};
 
+  document.querySelector('input[type=text]').focus();
+
   window.sendMessage = function() {
     var dc, id, message, messageElm, messages, results;
     messageElm = document.querySelector('input[type=text]');

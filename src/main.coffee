@@ -17,7 +17,6 @@ ready = ->
     pathname: path.join __dirname, 'index.html'
     protocol: 'file:'
     slashes: true
-  mainWindow.openDevTools()
 app.on 'ready', ready
 app.on 'window-all-closed', ->
   process.platform is 'darwin' or app.quit()
