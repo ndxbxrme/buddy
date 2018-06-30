@@ -7,10 +7,7 @@ desktopCapturer.getSources
   console.log sources
   navigator.mediaDevices.getUserMedia
     audio: false
-    video:
-      mandatory:
-        chromeMediaSource: 'desktop'
-        chromeMediaSourceId: sources[3].id
+    video: true
   .then (stream) ->
     video = document.querySelector 'video'
     video.srcObject = stream
