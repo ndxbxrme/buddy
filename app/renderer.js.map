@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "renderer.js",
+  "sourceRoot": "../src/",
+  "sources": [
+    "renderer.coffee"
+  ],
+  "names": [],
+  "mappings": "AAAA;EAAA;AAAA,MAAA;;EACA,CAAA,CAAC,eAAD,CAAA,GAAoB,OAAA,CAAQ,UAAR,CAApB;;EAEA,eAAe,CAAC,UAAhB,CACE;IAAA,KAAA,EAAO,CAAC,QAAD,EAAW,QAAX;EAAP,CADF,EAEE,QAAA,CAAC,GAAD,EAAM,OAAN,CAAA;IACA,OAAO,CAAC,GAAR,CAAY,OAAZ;WACA,SAAS,CAAC,YAAY,CAAC,YAAvB,CACE;MAAA,KAAA,EAAO,KAAP;MACA,KAAA,EACE;QAAA,SAAA,EACE;UAAA,iBAAA,EAAmB,SAAnB;UACA,mBAAA,EAAqB,OAAQ,CAAA,CAAA,CAAE,CAAC;QADhC;MADF;IAFF,CADF,CAMA,CAAC,IAND,CAMM,QAAA,CAAC,MAAD,CAAA;AACJ,UAAA;MAAA,KAAA,GAAQ,QAAQ,CAAC,aAAT,CAAuB,OAAvB;MACR,KAAK,CAAC,SAAN,GAAkB;aAClB,KAAK,CAAC,gBAAN,GAAyB,QAAA,CAAC,CAAD,CAAA;QACvB,OAAO,CAAC,GAAR,CAAY,CAAZ;eACA,KAAK,CAAC,IAAN,CAAA;MAFuB;IAHrB,CANN;EAFA,CAFF;AAHA",
+  "sourcesContent": [
+    "'use strict'\r\n{desktopCapturer} = require 'electron'\r\n\r\ndesktopCapturer.getSources\r\n  types: ['screen', 'window']\r\n, (err, sources) ->\r\n  console.log sources\r\n  navigator.mediaDevices.getUserMedia\r\n    audio: false\r\n    video:\r\n      mandatory:\r\n        chromeMediaSource: 'desktop'\r\n        chromeMediaSourceId: sources[3].id\r\n  .then (stream) ->\r\n    video = document.querySelector 'video'\r\n    video.srcObject = stream\r\n    video.onloadedmetadata = (e) ->\r\n      console.log e\r\n      video.play()"
+  ]
+}

@@ -21,11 +21,12 @@
     mainWindow.on('closed', function() {
       return mainWindow = null;
     });
-    return mainWindow.loadURL(url.format({
+    mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, 'index.html'),
       protocol: 'file:',
       slashes: true
     }));
+    return mainWindow.openDevTools();
   };
 
   app.on('ready', ready);
