@@ -19,7 +19,7 @@ html
       .messages
     svg
       filter#myFilter
-        feTurbulence(type='turbulence', baseFrequency='0.05', numOctaves='2', result='turbulence')
-        feDisplacementMap(in2='turbulence', in='SourceGraphic', scale='20', xChannelSelector='R', yChannelSelector='G')
+        feTurbulence(type='turbulence', baseFrequency='0.05', numOctaves='1', result='turbulence')
+        feDisplacementMap(in2='turbulence', in='SourceGraphic', scale='4', xChannelSelector='R', yChannelSelector='G')
     script(type='text/javascript').
       require('./renderer.js')

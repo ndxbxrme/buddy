@@ -30,7 +30,7 @@
     console.log(sources);
     handleEvents = function(id, _dc) {
       console.log('channel opened', id);
-      dcs.push;
+      dcs.push(_dc);
       return _dc.onmessage = function(event) {
         var messages;
         messages = document.querySelector('.messages');

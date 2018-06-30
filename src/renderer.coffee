@@ -6,8 +6,9 @@ opts =
   signaller: 'http://192.168.0.2:3000'
 dcs = []
 window.sendMessage = ->
-  message = document.querySelector 'input[type=text]'
-  .value
+  messageElm = document.querySelector 'input[type=text]'
+  message = messageElm.value
+  messageElm.value = ''
   messages = document.querySelector '.messages'
   messages.innerHTML += 'me: ' + message + '\n'
   dcs.forEach (dc) ->
