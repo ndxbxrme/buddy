@@ -5,6 +5,9 @@ opts =
   room: 'buddy'
   signaller: 'http://192.168.0.2:3000'
 dcs = {}
+
+document.querySelector 'input[type=text]'
+.focus()
 window.sendMessage = ->
   messageElm = document.querySelector 'input[type=text]'
   message = messageElm.value

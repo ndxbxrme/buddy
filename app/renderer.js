@@ -11,18 +11,21 @@
     signaller: 'http://192.168.0.2:3000'
   };
 
-  dcs = [];
+  dcs = {};
 
   window.sendMessage = function() {
-    var message, messageElm, messages;
+    var dc, id, message, messageElm, messages, results;
     messageElm = document.querySelector('input[type=text]');
     message = messageElm.value;
     messageElm.value = '';
     messages = document.querySelector('.messages');
     messages.innerHTML += 'me: ' + message + '\n';
-    return dcs.forEach(function(dc) {
-      return dc.send(message);
-    });
+    results = [];
+    for (id in dcs) {
+      dc = dcs[id];
+      results.push(dc.send(message));
+    }
+    return results;
   };
 
   desktopCapturer.getSources({
@@ -32,7 +35,7 @@
     console.log(sources);
     handleEvents = function(id, _dc) {
       console.log('channel opened', id);
-      dcs.push(_dc);
+      dcs[id] = _dc;
       return _dc.onmessage = function(event) {
         var messages;
         messages = document.querySelector('.messages');
@@ -55,7 +58,11 @@
         return video.onloadedmetadata = function(e) {
           return video.play();
         };
-      }).on('channel:opened:events', handleEvents);
+      }).on('call:ended', function(id) {
+        return document.querySelector('video[data-peer=' + id + ']').remove();
+      }).on('channel:opened:events', handleEvents).on('channel:closed:events', function(id) {
+        return delete dcs[id];
+      });
     }, function(err) {
       return desktopCapturer.getSources({
         types: ['screen', 'window']
@@ -75,12 +82,17 @@
           }).createDataChannel('events').addStream(stream).on('call:started', function(id, pc, data) {
             var video;
             video = document.createElement('video');
+            video.dataset.peer = id;
             document.querySelector('.videos').appendChild(video);
             video.srcObject = pc.getRemoteStreams()[0];
             return video.onloadedmetadata = function(e) {
               return video.play();
             };
-          }).on('channel:opened:events', handleEvents);
+          }).on('call:ended', function(id) {
+            return document.querySelector('video[data-peer=' + id + ']').remove();
+          }).on('channel:opened:events', handleEvents).on('channel:closed:events', function(id) {
+            return delete dcs[id];
+          });
         });
       });
     });
