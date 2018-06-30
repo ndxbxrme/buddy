@@ -26,19 +26,20 @@ desktopCapturer.getSources
     video: true
   .then (stream) ->
     console.log 'stream', stream
-    video = document.querySelector 'video'
     quickconnect opts.signaller,
       room: opts.room
       plugins: []
     .createDataChannel 'events'
     .addStream stream
     .on 'call:started', (id, pc, data) ->
+      video = document.createElement 'video'
+      document.querySelector '.videos'
+      .appendChild video
       video.srcObject = pc.getRemoteStreams()[0]
       video.onloadedmetadata = (e) ->
         video.play()
     .on 'channel:opened:events', handleEvents
   , (err) ->
-    video = document.querySelector 'video'
     desktopCapturer.getSources 
       types: ['screen', 'window']
     , (err, sources) ->
@@ -55,6 +56,9 @@ desktopCapturer.getSources
         .createDataChannel 'events'
         .addStream stream
         .on 'call:started', (id, pc, data) ->
+          video = document.createElement 'video'
+          document.querySelector '.videos'
+          .appendChild video
           video.srcObject = pc.getRemoteStreams()[0]
           video.onloadedmetadata = (e) ->
             video.play()

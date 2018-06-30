@@ -29,7 +29,7 @@
     handleEvents = function(id, _dc) {
       console.log('channel opened', id);
       dc = _dc;
-      return dc.onMessage = function(event) {
+      return dc.onmessage = function(event) {
         var messages;
         messages = document.querySelector('.messages');
         return messages.innerHTML += 'you: ' + event.data + '\n';
