@@ -4,11 +4,21 @@ quickconnect = require 'rtc-quickconnect'
 opts =
   room: 'buddy'
   signaller: 'http://192.168.0.2:3000'
-
+dc = null
+window.sendMessage = ->
+  message = document.querySelector 'input[type=text]'
+  .value
+  messages.innerHTML += 'me: ' + message + '\n'
+  dc?.send message
 desktopCapturer.getSources
   types: ['screen', 'window']
 , (err, sources) ->
   console.log sources
+  handleEvents = (id, _dc) ->
+    dc = _dc
+    dc.onMessage = (event) ->
+      messages = document.querySelector '.messages'
+      messages.innerHTML += 'you: ' + event.data + '\n'
   navigator.mediaDevices.getUserMedia
     audio: false
     video: true
@@ -18,11 +28,13 @@ desktopCapturer.getSources
     quickconnect opts.signaller,
       room: opts.room
       plugins: []
+    .createDataChannel 'events'
     .addStream stream
     .on 'call:started', (id, pc, data) ->
       video.srcObject = pc.getRemoteStreams()[0]
       video.onloadedmetadata = (e) ->
         video.play()
+    .on 'channel:opened:events'
   , (err) ->
     video = document.querySelector 'video'
     desktopCapturer.getSources 
@@ -38,6 +50,8 @@ desktopCapturer.getSources
         quickconnect opts.signaller,
           room: opts.room
           plugins: []
+        .createDataChannel 'events'
+        .addStream stream
         .on 'call:started', (id, pc, data) ->
           video.srcObject = pc.getRemoteStreams()[0]
           video.onloadedmetadata = (e) ->

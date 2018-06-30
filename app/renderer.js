@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  var desktopCapturer, opts, quickconnect;
+  var dc, desktopCapturer, opts, quickconnect;
 
   ({desktopCapturer} = require('electron'));
 
@@ -11,10 +11,28 @@
     signaller: 'http://192.168.0.2:3000'
   };
 
+  dc = null;
+
+  window.sendMessage = function() {
+    var message;
+    message = document.querySelector('input[type=text]').value;
+    console.log(message);
+    return dc.send(message);
+  };
+
   desktopCapturer.getSources({
     types: ['screen', 'window']
   }, function(err, sources) {
+    var handleEvents;
     console.log(sources);
+    handleEvents = function(id, _dc) {
+      dc = _dc;
+      return dc.onMessage = function(event) {
+        var messages;
+        messages = document.querySelector('.messages');
+        return messages.innerHTML += event.data + '\n';
+      };
+    };
     return navigator.mediaDevices.getUserMedia({
       audio: false,
       video: true
@@ -22,26 +40,40 @@
       var video;
       console.log('stream', stream);
       video = document.querySelector('video');
-      video.srcObject = stream;
-      video.onloadedmetadata = function(e) {
-        console.log(e);
-        return video.play();
-      };
       return quickconnect(opts.signaller, {
         room: opts.room,
         plugins: []
-      }).addStream(stream);
-    }, function(err) {
-      var video;
-      video = document.querySelector('video');
-      return quickconnect(opts.signaller, {
-        room: opts.room,
-        plugins: []
-      }).on('call:started', function(id, pc, data) {
+      }).createDataChannel('events').addStream(stream).on('call:started', function(id, pc, data) {
         video.srcObject = pc.getRemoteStreams()[0];
         return video.onloadedmetadata = function(e) {
           return video.play();
         };
+      }).on('channel:opened:events');
+    }, function(err) {
+      var video;
+      video = document.querySelector('video');
+      return desktopCapturer.getSources({
+        types: ['screen', 'window']
+      }, function(err, sources) {
+        return navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            mandatory: {
+              chromeMediaSource: 'desktop',
+              chromeMediaSourceId: sources[4].id
+            }
+          }
+        }).then(function(stream) {
+          return quickconnect(opts.signaller, {
+            room: opts.room,
+            plugins: []
+          }).createDataChannel('events').addStream(stream).on('call:started', function(id, pc, data) {
+            video.srcObject = pc.getRemoteStreams()[0];
+            return video.onloadedmetadata = function(e) {
+              return video.play();
+            };
+          });
+        });
       });
     });
   });
