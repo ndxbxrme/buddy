@@ -31,6 +31,7 @@
     "load-grunt-tasks": "^4.0.0"
   },
   "dependencies": {
-    "electron-updater": "^2.23.3"
+    "electron-updater": "^2.23.3",
+    "rtc-quickconnect": "^5.8.4"
   }
 }

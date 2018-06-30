@@ -1,9 +1,22 @@
 
 <html>
-  <head></head>
+  <head>
+    <style type="text/css">
+      video {
+        filter: url(#myFilter);
+        border: 3px solid black;
+      }
+    </style>
+  </head>
   <body>
     <h1>buddy buddy buddy</h1>
     <video></video>
+    <svg>
+      <filter id="myFilter">
+        <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
+        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+      </filter>
+    </svg>
     <script type="text/javascript">require('./renderer.js')</script>
   </body>
 </html>
