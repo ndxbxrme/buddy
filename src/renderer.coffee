@@ -18,7 +18,7 @@ desktopCapturer.getSources
   handleEvents = (id, _dc) ->
     console.log 'channel opened', id
     dc = _dc
-    dc.onMessage = (event) ->
+    dc.onmessage = (event) ->
       messages = document.querySelector '.messages'
       messages.innerHTML += 'you: ' + event.data + '\n'
   navigator.mediaDevices.getUserMedia
