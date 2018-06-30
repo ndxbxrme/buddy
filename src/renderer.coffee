@@ -13,7 +13,7 @@ window.sendMessage = ->
   message = messageElm.value
   messageElm.value = ''
   messages = document.querySelector '.messages'
-  messages.innerHTML += 'me: ' + message + '\n'
+  messages.innerHTML = 'me: ' + message + '\n' + messages.innerHTML
   for id, dc of dcs
     dc.send message
 desktopCapturer.getSources
