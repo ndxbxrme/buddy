@@ -39,21 +39,20 @@
       audio: false,
       video: true
     }).then(function(stream) {
-      var video;
       console.log('stream', stream);
-      video = document.querySelector('video');
       return quickconnect(opts.signaller, {
         room: opts.room,
         plugins: []
       }).createDataChannel('events').addStream(stream).on('call:started', function(id, pc, data) {
+        var video;
+        video = document.createElement('video');
+        document.querySelector('.videos').appendChild(video);
         video.srcObject = pc.getRemoteStreams()[0];
         return video.onloadedmetadata = function(e) {
           return video.play();
         };
       }).on('channel:opened:events', handleEvents);
     }, function(err) {
-      var video;
-      video = document.querySelector('video');
       return desktopCapturer.getSources({
         types: ['screen', 'window']
       }, function(err, sources) {
@@ -70,6 +69,9 @@
             room: opts.room,
             plugins: []
           }).createDataChannel('events').addStream(stream).on('call:started', function(id, pc, data) {
+            var video;
+            video = document.createElement('video');
+            document.querySelector('.videos').appendChild(video);
             video.srcObject = pc.getRemoteStreams()[0];
             return video.onloadedmetadata = function(e) {
               return video.play();

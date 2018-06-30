@@ -4,21 +4,22 @@ quickconnect = require 'rtc-quickconnect'
 opts =
   room: 'buddy'
   signaller: 'http://192.168.0.2:3000'
-dc = null
+dcs = []
 window.sendMessage = ->
   message = document.querySelector 'input[type=text]'
   .value
   messages = document.querySelector '.messages'
   messages.innerHTML += 'me: ' + message + '\n'
-  dc?.send message
+  dcs.forEach (dc) ->
+    dc.send message
 desktopCapturer.getSources
   types: ['screen', 'window']
 , (err, sources) ->
   console.log sources
   handleEvents = (id, _dc) ->
     console.log 'channel opened', id
-    dc = _dc
-    dc.onmessage = (event) ->
+    dcs.push
+    _dc.onmessage = (event) ->
       messages = document.querySelector '.messages'
       messages.innerHTML += 'you: ' + event.data + '\n'
   navigator.mediaDevices.getUserMedia

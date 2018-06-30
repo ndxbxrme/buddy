@@ -1,6 +1,9 @@
 html
   head
     style(type='text/css').
+      body {
+        display: flex;
+      }
       video {
         filter: url(#myFilter);
         border: 3px solid black;
@@ -10,10 +13,10 @@ html
         white-space: pre;
       }
   body
-    h1 buddy buddy buddy
     .videos
-    input(type='text', onchange='sendMessage()')
-    .messages
+    .message-panel
+      input(type='text', onchange='sendMessage()')
+      .messages
     svg
       filter#myFilter
         feTurbulence(type='turbulence', baseFrequency='0.05', numOctaves='2', result='turbulence')
