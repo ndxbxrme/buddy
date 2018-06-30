@@ -21,7 +21,7 @@
     message = messageElm.value;
     messageElm.value = '';
     messages = document.querySelector('.messages');
-    messages.innerHTML += 'me: ' + message + '\n';
+    messages.innerHTML = 'me: ' + message + '\n' + messages.innerHTML;
     results = [];
     for (id in dcs) {
       dc = dcs[id];

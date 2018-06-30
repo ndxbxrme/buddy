@@ -25,7 +25,7 @@ desktopCapturer.getSources
     dcs[id] = _dc
     _dc.onmessage = (event) ->
       messages = document.querySelector '.messages'
-      messages.innerHTML += 'you: ' + event.data + '\n'
+      messages.innerHTML = 'you: ' + event.data + '\n' + messages.innerHTML
   navigator.mediaDevices.getUserMedia
     audio: false
     video: true
